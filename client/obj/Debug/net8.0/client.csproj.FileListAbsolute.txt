@@ -1,0 +1,15 @@
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/bin/Debug/net8.0/client
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/bin/Debug/net8.0/client.deps.json
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/bin/Debug/net8.0/client.runtimeconfig.json
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/bin/Debug/net8.0/client.dll
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/bin/Debug/net8.0/client.pdb
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/obj/Debug/net8.0/client.GeneratedMSBuildEditorConfig.editorconfig
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/obj/Debug/net8.0/client.AssemblyInfoInputs.cache
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/obj/Debug/net8.0/client.AssemblyInfo.cs
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/obj/Debug/net8.0/client.csproj.CoreCompileInputs.cache
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/obj/Debug/net8.0/client.sourcelink.json
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/obj/Debug/net8.0/client.dll
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/obj/Debug/net8.0/refint/client.dll
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/obj/Debug/net8.0/client.pdb
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/obj/Debug/net8.0/client.genruntimeconfig.cache
+/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/client/obj/Debug/net8.0/ref/client.dll

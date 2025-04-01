@@ -50,42 +50,35 @@ namespace server
 
             // TODO: [Create a socket and endpoints and bind it to the server IP address and port number]
             
-            var ipAddress = IPAddress.Parse(setting.ServerIPAddress);
-            IPEndPoint ipEndPoint = new(ipAddress, setting.ServerPortNumber);
 
-            using Socket listener = new (
-                ipEndPoint.AddressFamily,
-                SocketType.Stream,
+            // var ipAddress = IPAddress.Parse(setting.ServerIPAddress);
+            IPHostEntry iPHostEntry = Dns.GetHostEntry(Dns.GetHostName());
+            IPEndPoint ipEndPoint = new(iPHostEntry.AddressList[0], 11000);//setting.ServerPortNumber);
+
+            using Socket socket = new (
+                ipEndPoint.Address.AddressFamily,
+                SocketType.Dgram,
                 ProtocolType.Udp
             );
 
-            listener.Bind(ipEndPoint);
-            listener.Listen(100);
+            // Creates an IPEndPoint to capture the identity of the sending host.
+            IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
+            EndPoint senderRemote = (EndPoint)sender;
+
+            // Binding is required with ReceiveFrom calls.
+            socket.Bind(ipEndPoint);
+
+            byte[] msg = new Byte[256];
+            Console.WriteLine("Waiting to receive datagrams from client...");
+            // This call blocks.
+            socket.ReceiveFrom(msg, msg.Length, SocketFlags.None, ref senderRemote);
+            socket.Close();
+            Console.WriteLine($"Message received from {senderRemote.ToString()}");
+            Console.WriteLine(Encoding.ASCII.GetString(msg));
 
             // TODO:[Receive and print a received Message from the client]
-            var handler = await listener.AcceptAsync();
 
-            while (true)
-            {
-                var buffer = new byte[1_024];
-                var received = await handler.ReceiveAsync(buffer);
-                var response = Encoding.UTF8.GetString(buffer, 0, received);
 
-                var eom = "<|EOM|>";
-                if (response.IndexOf(eom) > -1)
-                {
-                    Console.WriteLine(
-                        $"Socket server received message: \"{response.Replace(eom, "")}\"");
-
-                    var ackMessage = "<|ACK|>";
-                    var echoBytes = Encoding.UTF8.GetBytes(ackMessage);
-                    await handler.SendAsync(echoBytes, 0);
-                    Console.WriteLine(
-                        $"Socket server sent acknowledgment: \"{ackMessage}\"");
-
-                    break;
-
-            }
 
 
 
