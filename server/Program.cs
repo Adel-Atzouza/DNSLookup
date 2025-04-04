@@ -1,13 +1,7 @@
-﻿using System;
-using System.Data;
-using System.Data.SqlTypes;
-using System.Net;
-using System.Net.NetworkInformation;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using LibData;
 
 // ReceiveFrom();
@@ -32,50 +26,56 @@ namespace server
 
     class ServerUDP
     {
+        static readonly Random random = new();
+
         static readonly string configFile = @"../Setting.json";
         static readonly string configContent = File.ReadAllText(configFile);
         static readonly Setting? setting = JsonSerializer.Deserialize<Setting>(configContent);
 
         // [Done] TODO: [Read the JSON file and return the list of DNSRecords]
-        static readonly string dnsRecordsFile = @"../DNSrecords.json";
+        static readonly string dnsRecordsFile = @"./DNSrecords.json";
         static readonly string dnsRecordsContent = File.ReadAllText(dnsRecordsFile);
         static readonly List<DNSRecord>? dnsRecords = JsonSerializer.Deserialize<List<DNSRecord>>(dnsRecordsContent);
 
 
+        private static byte[] Buffer = new byte[4096];
 
+        private static int MsgId = 0;
 
-        public static async void Start()
+        public static void Start()
         {
-
-
-            // TODO: [Create a socket and endpoints and bind it to the server IP address and port number]
-            
-
             // var ipAddress = IPAddress.Parse(setting.ServerIPAddress);
-            IPHostEntry iPHostEntry = Dns.GetHostEntry(Dns.GetHostName());
-            IPEndPoint ipEndPoint = new(iPHostEntry.AddressList[0], 11000);//setting.ServerPortNumber);
+            var iPHostEntry = Dns.GetHostEntry(Dns.GetHostName());
+            var ipEndPoint = new IPEndPoint(iPHostEntry.AddressList[0], 11000);
 
-            using Socket socket = new (
+            using var socket = new Socket
+            (
                 ipEndPoint.Address.AddressFamily,
                 SocketType.Dgram,
                 ProtocolType.Udp
             );
 
-            // Creates an IPEndPoint to capture the identity of the sending host.
-            IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-            EndPoint senderRemote = (EndPoint)sender;
+            var sender = new IPEndPoint(IPAddress.Any, 0);
+            var senderRemote = (EndPoint) sender;
 
-            // Binding is required with ReceiveFrom calls.
             socket.Bind(ipEndPoint);
 
-            byte[] msg = new Byte[256];
-            Console.WriteLine("Waiting to receive datagrams from client...");
-            // This call blocks.
-            socket.ReceiveFrom(msg, msg.Length, SocketFlags.None, ref senderRemote);
-            socket.Close();
-            Console.WriteLine($"Message received from {senderRemote.ToString()}");
-            Console.WriteLine(Encoding.ASCII.GetString(msg));
+            while (true)
+            {
+                Message? msg = ReceiveFrom(socket, Buffer, ref senderRemote);
 
+                switch (msg.MsgType)
+                {
+                    case MessageType.Hello:
+                        HandleHandshake(socket, senderRemote);
+                        break;
+                    case MessageType.DNSLookup:
+                        HandleDNSLookup(socket, senderRemote, msg);
+                        break;
+                }
+            }
+
+            socket.Close();
             // TODO:[Receive and print a received Message from the client]
 
 
@@ -108,6 +108,45 @@ namespace server
 
         }
 
+        private static void HandleDNSLookup(Socket socket, EndPoint senderRemote, Message msg)
+        {
+            DNSRecord? dnsRecord = JsonSerializer.Deserialize<DNSRecord>(msg.Content.ToString());
+            DNSRecord? foundRecord = dnsRecords?.FirstOrDefault(record => record.Name == dnsRecord.Name && record.Type == dnsRecord.Type);
 
+            Message replyMsg = new()
+            {
+                MsgId = foundRecord is not null ? msg.MsgId : random.Next(),
+                MsgType = foundRecord is not null ? MessageType.DNSLookupReply : MessageType.Error,
+                Content = foundRecord is not null ? foundRecord : "Domain not found"
+            };
+
+            SendTo(socket, replyMsg, senderRemote);
+        }
+
+        private static void HandleHandshake(Socket socket, EndPoint endPoint)
+        {
+            Message HandshakeMsg = new()
+            {
+                MsgId = random.Next(),
+                MsgType = MessageType.Welcome,
+                Content = "Welcome from server."
+            };
+
+            SendTo(socket, HandshakeMsg, endPoint);
+        }
+
+        private static int SendTo(Socket socket, object message, EndPoint endPoint)
+        {
+            string json = JsonSerializer.Serialize(message);
+            byte[] msg = Encoding.ASCII.GetBytes(json);
+            return socket.SendTo(msg, 0, msg.Length, SocketFlags.None, endPoint);
+        }
+
+        private static Message? ReceiveFrom(Socket socket, byte[] buffer, ref EndPoint endPoint)
+        {
+            int bytesReceived = socket.ReceiveFrom(buffer, ref endPoint);
+            string receivedData = Encoding.ASCII.GetString(buffer, 0, bytesReceived);
+            return JsonSerializer.Deserialize<Message>(receivedData);
+        }
     }
 }
