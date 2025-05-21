@@ -1,36 +1,36 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {}
+    "net9.0": {}
   },
   "libraries": {},
   "projectFileDependencyGroups": {
-    "net8.0": []
+    "net9.0": []
   },
   "packageFolders": {
-    "/home/adil/.nuget/packages/": {}
+    "C:\\Users\\marko\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/server/server.csproj",
+      "projectUniqueName": "C:\\Users\\marko\\Documents\\GitHub\\DNSLookup\\server\\server.csproj",
       "projectName": "server",
-      "projectPath": "/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/server/server.csproj",
-      "packagesPath": "/home/adil/.nuget/packages/",
-      "outputPath": "/home/adil/Documents/Assignment Template/AssignmentTemplateStudent/server/obj/",
+      "projectPath": "C:\\Users\\marko\\Documents\\GitHub\\DNSLookup\\server\\server.csproj",
+      "packagesPath": "C:\\Users\\marko\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\marko\\Documents\\GitHub\\DNSLookup\\server\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/adil/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\marko\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
-        "net8.0"
+        "net9.0"
       ],
       "sources": {
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
+        "net9.0": {
+          "targetAlias": "net9.0",
           "projectReferences": {}
         }
       },
@@ -38,11 +38,17 @@
         "warnAsError": [
           "NU1605"
         ]
-      }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
-      "net8.0": {
-        "targetAlias": "net8.0",
+      "net9.0": {
+        "targetAlias": "net9.0",
         "imports": [
           "net461",
           "net462",
@@ -59,7 +65,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.114/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

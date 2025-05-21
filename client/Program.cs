@@ -38,7 +38,11 @@ class ClientUDP
     private static int MsgId = 0;
     private static byte[] Buffer = new Byte[4096];
 
-
+    private static void Log(string action, string details)
+    {
+        var timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
+        Console.WriteLine($"[{timestamp}] {action,-15} {details}");
+    }
     public static void Start()
     {
 
@@ -53,10 +57,13 @@ class ClientUDP
         );
 
         var Server = (EndPoint) endPoint;
+       
+        Log("CLIENT", $"Started, connecting to {endPoint}");
 
         if (CreateHandshake(socket, endPoint))
         {
             Console.WriteLine("Handshake successful.");
+            Log("HANDSHAKE", "Successful");
 
             DnsLookup(socket, endPoint, new DNSRecord() {Type="A", Name= "www.sample.com"});
         }

@@ -42,6 +42,12 @@ namespace server
 
         private static int MsgId = 0;
 
+        private static void Log(string action, string details)
+        {
+            var timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
+            Console.WriteLine($"[{timestamp}] {action,-15} {details}");
+        }
+
         public static void Start()
         {
             // var ipAddress = IPAddress.Parse(setting.ServerIPAddress);
@@ -55,7 +61,7 @@ namespace server
                 ProtocolType.Udp
             );
 
-            var sender = new IPEndPoint(IPAddress.Any, 0);
+            var sender = new IPEndPoint(IPAddress.IPv6Any, 0);
             var senderRemote = (EndPoint) sender;
 
             socket.Bind(ipEndPoint);
@@ -72,29 +78,14 @@ namespace server
                     case MessageType.DNSLookup:
                         HandleDNSLookup(socket, senderRemote, msg);
                         break;
+                    case MessageType.Ack:
+                        HandleAck(socket, senderRemote, msg);
+                        break;
                 }
             }
 
             socket.Close();
-            // TODO:[Receive and print a received Message from the client]
 
-
-
-
-
-            // TODO:[Receive and print Hello]
-
-
-
-            // TODO:[Send Welcome to the client]
-
-
-            // TODO:[Receive and print DNSLookup]
-
-
-            // TODO:[Query the DNSRecord in Json file]
-
-            // TODO:[If found Send DNSLookupReply containing the DNSRecord]
 
 
 
@@ -107,7 +98,7 @@ namespace server
             // TODO:[If no further requests receieved send End to the client]
 
         }
-
+        /*
         private static void HandleDNSLookup(Socket socket, EndPoint senderRemote, Message msg)
         {
             DNSRecord? dnsRecord = JsonSerializer.Deserialize<DNSRecord>(msg.Content.ToString());
@@ -122,6 +113,67 @@ namespace server
 
             SendTo(socket, replyMsg, senderRemote);
         }
+        */
+        private static void HandleDNSLookup(Socket socket, EndPoint senderRemote, Message msg)
+        {
+            try
+            {
+                Log("RECEIVED", $"DNSLookup (ID:{msg.MsgId}) for {msg.Content}");
+                DNSRecord? dnsRecord = null;
+                
+                if (msg.Content is JsonElement jsonElement)
+                {
+                    dnsRecord = JsonSerializer.Deserialize<DNSRecord>(jsonElement.GetRawText());
+                }
+
+                if (dnsRecord == null || string.IsNullOrEmpty(dnsRecord.Name))
+                {
+                    throw new ArgumentException("DNS lookup must contain Name and Type");
+                }
+
+                DNSRecord? foundRecord = dnsRecords?.FirstOrDefault(record => 
+                    record.Name.Equals(dnsRecord.Name, StringComparison.OrdinalIgnoreCase) && 
+                    record.Type.Equals(dnsRecord.Type, StringComparison.OrdinalIgnoreCase));
+
+                Message replyMsg = new()
+                {
+                    MsgId = foundRecord is not null ? msg.MsgId : random.Next(),
+                    MsgType = foundRecord is not null ? MessageType.DNSLookupReply : MessageType.Error,
+                    Content = foundRecord is not null ? foundRecord : $"Domain not found: {dnsRecord.Name}"
+                };
+                
+                Log("SENDING", $"{replyMsg.MsgType} (ID:{replyMsg.MsgId}) for {dnsRecord.Name}");
+                SendTo(socket, replyMsg, senderRemote);
+            }
+            catch (Exception ex)
+            {
+
+                Message errorMsg = new()
+                {
+                    MsgId = random.Next(),
+                    MsgType = MessageType.Error,
+                    Content = $"Error: {ex.Message}"
+                };
+
+                SendTo(socket, errorMsg, senderRemote);
+            }
+        }
+
+        private static void HandleAck(Socket socket, EndPoint senderRemote, Message ackMessage)
+        {
+            if(ackMessage.MsgType == MessageType.Ack)
+            {
+                Message endMsg = new()
+                {
+                    MsgId = random.Next(),
+                    MsgType = MessageType.End,
+                    Content = "End of DNSLookup"
+                };
+                Log("SENDING", $"End (ID:{endMsg.MsgId}) to {senderRemote}");
+                SendTo(socket, endMsg, senderRemote);
+
+            }
+        }
 
         private static void HandleHandshake(Socket socket, EndPoint endPoint)
         {
@@ -131,7 +183,7 @@ namespace server
                 MsgType = MessageType.Welcome,
                 Content = "Welcome from server."
             };
-
+            Log("SENDING", $"Welcome (ID:{HandshakeMsg.MsgId}) to {endPoint}");
             SendTo(socket, HandshakeMsg, endPoint);
         }
 

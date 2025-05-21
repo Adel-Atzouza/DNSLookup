@@ -13,3 +13,18 @@
 /home/adil/Documents/Assignment Template/AssignmentTemplateStudent/server/obj/Debug/net8.0/server.pdb
 /home/adil/Documents/Assignment Template/AssignmentTemplateStudent/server/obj/Debug/net8.0/server.genruntimeconfig.cache
 /home/adil/Documents/Assignment Template/AssignmentTemplateStudent/server/obj/Debug/net8.0/ref/server.dll
+C:\Users\marko\Documents\GitHub\DNSLookup\server\bin\Debug\net8.0\server.exe
+C:\Users\marko\Documents\GitHub\DNSLookup\server\bin\Debug\net8.0\server.deps.json
+C:\Users\marko\Documents\GitHub\DNSLookup\server\bin\Debug\net8.0\server.runtimeconfig.json
+C:\Users\marko\Documents\GitHub\DNSLookup\server\bin\Debug\net8.0\server.dll
+C:\Users\marko\Documents\GitHub\DNSLookup\server\bin\Debug\net8.0\server.pdb
+C:\Users\marko\Documents\GitHub\DNSLookup\server\obj\Debug\net8.0\server.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\marko\Documents\GitHub\DNSLookup\server\obj\Debug\net8.0\server.AssemblyInfoInputs.cache
+C:\Users\marko\Documents\GitHub\DNSLookup\server\obj\Debug\net8.0\server.AssemblyInfo.cs
+C:\Users\marko\Documents\GitHub\DNSLookup\server\obj\Debug\net8.0\server.csproj.CoreCompileInputs.cache
+C:\Users\marko\Documents\GitHub\DNSLookup\server\obj\Debug\net8.0\server.sourcelink.json
+C:\Users\marko\Documents\GitHub\DNSLookup\server\obj\Debug\net8.0\server.dll
+C:\Users\marko\Documents\GitHub\DNSLookup\server\obj\Debug\net8.0\refint\server.dll
+C:\Users\marko\Documents\GitHub\DNSLookup\server\obj\Debug\net8.0\server.pdb
+C:\Users\marko\Documents\GitHub\DNSLookup\server\obj\Debug\net8.0\server.genruntimeconfig.cache
+C:\Users\marko\Documents\GitHub\DNSLookup\server\obj\Debug\net8.0\ref\server.dll
