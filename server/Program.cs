@@ -86,34 +86,7 @@ namespace server
 
             socket.Close();
 
-
-
-
-            // TODO:[If not found Send Error]
-
-
-            // TODO:[Receive Ack about correct DNSLookupReply from the client]
-
-
-            // TODO:[If no further requests receieved send End to the client]
-
         }
-        /*
-        private static void HandleDNSLookup(Socket socket, EndPoint senderRemote, Message msg)
-        {
-            DNSRecord? dnsRecord = JsonSerializer.Deserialize<DNSRecord>(msg.Content.ToString());
-            DNSRecord? foundRecord = dnsRecords?.FirstOrDefault(record => record.Name == dnsRecord.Name && record.Type == dnsRecord.Type);
-
-            Message replyMsg = new()
-            {
-                MsgId = foundRecord is not null ? msg.MsgId : random.Next(),
-                MsgType = foundRecord is not null ? MessageType.DNSLookupReply : MessageType.Error,
-                Content = foundRecord is not null ? foundRecord : "Domain not found"
-            };
-
-            SendTo(socket, replyMsg, senderRemote);
-        }
-        */
         private static void HandleDNSLookup(Socket socket, EndPoint senderRemote, Message msg)
         {
             try
