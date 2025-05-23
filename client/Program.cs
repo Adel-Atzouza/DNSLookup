@@ -45,33 +45,31 @@ class ClientUDP
     }
     public static void Start()
     {
+        var clientIP = IPAddress.Parse(setting.ClientIPAddress);                    // 🔧
+        var clientEndPoint = new IPEndPoint(clientIP, setting.ClientPortNumber);   // 🔧
 
-        var hostEntry = Dns.GetHostEntry(Dns.GetHostName());
-        var endPoint = new IPEndPoint(hostEntry.AddressList[0], 11000);
+        var serverIP = IPAddress.Parse(setting.ServerIPAddress);                   // 🔧
+        var serverEndPoint = new IPEndPoint(serverIP, setting.ServerPortNumber);   // 🔧
 
-        Socket socket = new
-        (
-            endPoint.Address.AddressFamily,
+        Socket socket = new(
+            AddressFamily.InterNetworkV6,
             SocketType.Dgram,
             ProtocolType.Udp
         );
 
-        var Server = (EndPoint) endPoint;
-       
-        Log("CLIENT", $"Started, connecting to {endPoint}");
+        socket.Bind(clientEndPoint);                                               // 🔧
 
-        if (CreateHandshake(socket, endPoint))
+        Log("CLIENT", $"Started, connecting to {serverEndPoint}");                 // 🔧
+
+        if (CreateHandshake(socket, serverEndPoint))                               // 🔧
         {
             Console.WriteLine("Handshake successful.");
             Log("HANDSHAKE", "Successful");
 
-            DnsLookup(socket, endPoint, new DNSRecord() {Type="A", Name= "www.sample.com"});
+            DnsLookup(socket, serverEndPoint, new DNSRecord() { Type = "A", Name = "www.sample.com" });   // 🔧
         }
 
-        
-        
         socket.Close();
-
 
         //TODO: [Create endpoints and socket]
 

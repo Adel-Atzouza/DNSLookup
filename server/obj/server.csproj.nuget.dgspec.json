@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\marko\\Documents\\GitHub\\DNSLookup\\server\\server.csproj": {}
+    "/home/adil/Documents/git/DNSLookup/server/server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\marko\\Documents\\GitHub\\DNSLookup\\server\\server.csproj": {
+    "/home/adil/Documents/git/DNSLookup/server/server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\marko\\Documents\\GitHub\\DNSLookup\\server\\server.csproj",
+        "projectUniqueName": "/home/adil/Documents/git/DNSLookup/server/server.csproj",
         "projectName": "server",
-        "projectPath": "C:\\Users\\marko\\Documents\\GitHub\\DNSLookup\\server\\server.csproj",
-        "packagesPath": "C:\\Users\\marko\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\marko\\Documents\\GitHub\\DNSLookup\\server\\obj\\",
+        "projectPath": "/home/adil/Documents/git/DNSLookup/server/server.csproj",
+        "packagesPath": "/home/adil/.nuget/packages/",
+        "outputPath": "/home/adil/Documents/git/DNSLookup/server/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\marko\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/adil/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -38,7 +38,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -54,12 +54,18 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[9.0.4, 9.0.4]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.105/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

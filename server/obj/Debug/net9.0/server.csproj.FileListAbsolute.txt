@@ -1,0 +1,15 @@
+/home/adil/Documents/git/DNSLookup/server/bin/Debug/net9.0/server
+/home/adil/Documents/git/DNSLookup/server/bin/Debug/net9.0/server.deps.json
+/home/adil/Documents/git/DNSLookup/server/bin/Debug/net9.0/server.runtimeconfig.json
+/home/adil/Documents/git/DNSLookup/server/bin/Debug/net9.0/server.dll
+/home/adil/Documents/git/DNSLookup/server/bin/Debug/net9.0/server.pdb
+/home/adil/Documents/git/DNSLookup/server/obj/Debug/net9.0/server.GeneratedMSBuildEditorConfig.editorconfig
+/home/adil/Documents/git/DNSLookup/server/obj/Debug/net9.0/server.AssemblyInfoInputs.cache
+/home/adil/Documents/git/DNSLookup/server/obj/Debug/net9.0/server.AssemblyInfo.cs
+/home/adil/Documents/git/DNSLookup/server/obj/Debug/net9.0/server.csproj.CoreCompileInputs.cache
+/home/adil/Documents/git/DNSLookup/server/obj/Debug/net9.0/server.sourcelink.json
+/home/adil/Documents/git/DNSLookup/server/obj/Debug/net9.0/server.dll
+/home/adil/Documents/git/DNSLookup/server/obj/Debug/net9.0/refint/server.dll
+/home/adil/Documents/git/DNSLookup/server/obj/Debug/net9.0/server.pdb
+/home/adil/Documents/git/DNSLookup/server/obj/Debug/net9.0/server.genruntimeconfig.cache
+/home/adil/Documents/git/DNSLookup/server/obj/Debug/net9.0/ref/server.dll

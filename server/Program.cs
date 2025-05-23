@@ -50,13 +50,13 @@ namespace server
 
         public static void Start()
         {
-            // var ipAddress = IPAddress.Parse(setting.ServerIPAddress);
-            var iPHostEntry = Dns.GetHostEntry(Dns.GetHostName());
-            var ipEndPoint = new IPEndPoint(iPHostEntry.AddressList[0], 11000);
+            var ipAddress = IPAddress.Parse(setting.ServerIPAddress);
+            // var iPHostEntry = Dns.GetHostEntry(Dns.GetHostName());
+            var ipEndPoint = new IPEndPoint(ipAddress, setting.ServerPortNumber);
 
             using var socket = new Socket
             (
-                ipEndPoint.Address.AddressFamily,
+                AddressFamily.InterNetworkV6,
                 SocketType.Dgram,
                 ProtocolType.Udp
             );
