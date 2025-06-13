@@ -4,7 +4,6 @@ using System.Text;
 using System.Text.Json;
 using LibData;
 
-// ReceiveFrom();
 namespace server 
 {
     class Program
@@ -32,7 +31,6 @@ namespace server
         static readonly string configContent = File.ReadAllText(configFile);
         static readonly Setting? setting = JsonSerializer.Deserialize<Setting>(configContent);
 
-        // [Done] TODO: [Read the JSON file and return the list of DNSRecords]
         static readonly string dnsRecordsFile = @"./DNSrecords.json";
         static readonly string dnsRecordsContent = File.ReadAllText(dnsRecordsFile);
         static readonly List<DNSRecord>? dnsRecords = JsonSerializer.Deserialize<List<DNSRecord>>(dnsRecordsContent);
@@ -51,7 +49,6 @@ namespace server
         public static void Start()
         {
             var ipAddress = IPAddress.Parse(setting.ServerIPAddress);
-            // var iPHostEntry = Dns.GetHostEntry(Dns.GetHostName());
             var ipEndPoint = new IPEndPoint(ipAddress, setting.ServerPortNumber);
 
             using var socket = new Socket
@@ -65,6 +62,8 @@ namespace server
             var senderRemote = (EndPoint) sender;
 
             socket.Bind(ipEndPoint);
+
+            Console.WriteLine($"Server started at {ipEndPoint} and waiting for messages...");
 
             while (true)
             {

@@ -1,10 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ucdhOWXTIcA=",
+  "dgSpecHash": "6mMVdb2Ri1Q=",
   "success": true,
   "projectFilePath": "/home/adil/Documents/git/DNSLookup/client/client.csproj",
-  "expectedPackageFiles": [
-    "/home/adil/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.4/microsoft.aspnetcore.app.ref.9.0.4.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }

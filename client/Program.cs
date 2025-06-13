@@ -1,12 +1,8 @@
-﻿using System.Collections.Immutable;
-using System.ComponentModel;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
+
 using LibData;
 
 // SendTo();
@@ -43,13 +39,22 @@ class ClientUDP
         var timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
         Console.WriteLine($"[{timestamp}] {action,-15} {details}");
     }
+    
+    private static readonly List<(string Type, string Name)> TestQueries = new()
+    {
+        ("A", "example.com"),
+        ("A", "www.outlook.com"),
+        ("A", "www.customdomain.com"),
+        ("MX", "example.com"),
+        ("A", "mail.example.com")
+    };
     public static void Start()
     {
-        var clientIP = IPAddress.Parse(setting.ClientIPAddress);                    // 🔧
-        var clientEndPoint = new IPEndPoint(clientIP, setting.ClientPortNumber);   // 🔧
+        var clientIP = IPAddress.Parse(setting.ClientIPAddress);
+        var clientEndPoint = new IPEndPoint(clientIP, setting.ClientPortNumber);
 
-        var serverIP = IPAddress.Parse(setting.ServerIPAddress);                   // 🔧
-        var serverEndPoint = new IPEndPoint(serverIP, setting.ServerPortNumber);   // 🔧
+        var serverIP = IPAddress.Parse(setting.ServerIPAddress);
+        var serverEndPoint = new IPEndPoint(serverIP, setting.ServerPortNumber);
 
         Socket socket = new(
             AddressFamily.InterNetworkV6,
@@ -57,16 +62,28 @@ class ClientUDP
             ProtocolType.Udp
         );
 
-        socket.Bind(clientEndPoint);                                               // 🔧
+        socket.Bind(clientEndPoint);
 
-        Log("CLIENT", $"Started, connecting to {serverEndPoint}");                 // 🔧
+        Log("CLIENT", $"Started, connecting to {serverEndPoint}");
 
-        if (CreateHandshake(socket, serverEndPoint))                               // 🔧
+        foreach (var (type, name) in TestQueries)
         {
-            Console.WriteLine("Handshake successful.");
-            Log("HANDSHAKE", "Successful");
+            if (CreateHandshake(socket, serverEndPoint))
+            {
+                Console.WriteLine("Handshake successful.");
+                Log("HANDSHAKE", "Successful");
 
-            DnsLookup(socket, serverEndPoint, new DNSRecord() { Type = "A", Name = "www.sample.com" });   // 🔧
+                var DnsFound = DnsLookup(socket, serverEndPoint, new DNSRecord()
+                {
+                    Type = type,
+                    Name = name
+                });
+
+                if (DnsFound == null)
+                {
+                    Log("DNSLOOKUP", "No DNS Record found.");
+                }
+            }
         }
 
         socket.Close();
@@ -83,13 +100,28 @@ class ClientUDP
             Content = dNSRecord
         };
 
+        Console.WriteLine("ok");
+
         SendTo(socket, DnsLookupMsg, endPoint);
 
         Message? result = null;
         while (result is null || result.MsgType != MessageType.DNSLookupReply || result.MsgId != DnsLookupMsg.MsgId)
         {
             result = ReceiveFrom(socket, Buffer, ref endPoint);
+
+            if (result == null)
+            {
+                Log("ERROR", "No response received from server.");
+                return null;
+            }
+            else if (result.MsgType == MessageType.Error)
+            {
+                Log("ERROR", $"Server error: {result.Content}");
+                return null;
+            }
         }
+
+
 
         SendTo(socket, new Message()
         {
@@ -98,13 +130,23 @@ class ClientUDP
             Content = DnsLookupMsg.MsgId
         }, endPoint);
 
+        Log("DNSLOOKUP", $"Sent DNS Lookup for {dNSRecord.Name} of type {dNSRecord.Type}");
+
         var end = ReceiveFrom(socket, Buffer, ref endPoint);
+
+        var dnsrecord = JsonSerializer.Deserialize<DNSRecord>(result.Content.ToString());
+
+        if (dnsrecord != null)
+        {
+            Log("DNSLOOKUP Reply", $"DNS Record Found: {dnsrecord.Name} - {dnsrecord.Type} - {dnsrecord.Value}");
+        }
+
         if (end?.MsgType == MessageType.End)
         {
-            Console.WriteLine("End of communication.");
+            Log("END", "Communication ended.");
         }
         
-        return JsonSerializer.Deserialize<DNSRecord>(result.Content.ToString());
+        return dnsrecord;
     }
 
     public static bool CreateHandshake(Socket socket, EndPoint endPoint)
